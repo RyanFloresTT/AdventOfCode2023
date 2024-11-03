@@ -5,7 +5,7 @@ namespace AdventOfCode23.DayTwo;
 
 public static class DayTwo
 {
-    static int PartOneHelper(string? line)
+    static Task<int> PartOneHelper(string? line)
     {
         // get from end of "Game" + 1 (to include space), to the first :, which will give us the id of the game
         
@@ -21,7 +21,8 @@ public static class DayTwo
         line = line[(firstColonIndex + 2)..];
         
         // if a game is possible, meaning that it has values of r/g/b lower than 12/13/14, then return the game id, otherwise, don't
-        return GameIsPossible(line) ? gameId : 0;
+        var res = GameIsPossible(line) ? gameId : 0;
+        return Task.FromResult(res);
     }
     
     struct ColorCounts
@@ -83,21 +84,21 @@ public static class DayTwo
         return true;
     }
     
-    public static int PartOne(string filename = "input.txt")
+    public static async Task<int> PartOne(string filename = "input.txt")
     {
         var possibleGames = 0;
         
-        LineUtils.ProcessFileLines("DayTwo", filename, PartOneHelper, result => possibleGames += result);
+        await LineUtils.ProcessFileLinesAsync("DayTwo", filename, PartOneHelper, async result => await Task.Run(() => possibleGames += result));
         
         return possibleGames;
     }
 
-    static int PartTwoHelper(string? line)
+    static Task<int> PartTwoHelper(string? line)
     {
         var firstColonIndex = line.IndexOf(':');
         line = line[(firstColonIndex + 2)..];
         Console.WriteLine(line);
-        ColorCounts power = new()
+        ColorCounts powerCounts = new()
         {
             Red = new Color(){Name = "Red", Count = 0},
             Green = new Color(){Name = "Green", Count = 0},
@@ -118,25 +119,27 @@ public static class DayTwo
                 switch (combo[1])
                 {
                     case "red":
-                        power.Red.Count = value > power.Red.Count ? value : power.Red.Count;
+                        powerCounts.Red.Count = value > powerCounts.Red.Count ? value : powerCounts.Red.Count;
                         break;
                     case "green":
-                        power.Green.Count = value > power.Green.Count ? value : power.Green.Count;
+                        powerCounts.Green.Count = value > powerCounts.Green.Count ? value : powerCounts.Green.Count;
                         break;
                     case "blue":
-                        power.Blue.Count = value > power.Blue.Count ? value : power.Blue.Count;
+                        powerCounts.Blue.Count = value > powerCounts.Blue.Count ? value : powerCounts.Blue.Count;
                         break;
                 }
             }
         }
-        return power.Red.Count * power.Green.Count * power.Blue.Count;
+
+        var power = powerCounts.Red.Count * powerCounts.Green.Count * powerCounts.Blue.Count;
+        return Task.FromResult(power);
     }
 
-    public static int PartTwo(string filename = "input.txt")
+    public static async Task<int> PartTwo(string filename = "input.txt")
     {
         var totalPower = 0;
         
-        LineUtils.ProcessFileLines("DayTwo", filename, PartTwoHelper, result => totalPower += result);
+        await LineUtils.ProcessFileLinesAsync("DayTwo", filename, PartTwoHelper, async result => await Task.Run(() => totalPower += result));
 
         return totalPower;
     }

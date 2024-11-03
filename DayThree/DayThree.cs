@@ -3,8 +3,8 @@
 public static class DayThree
 {
     static string symbols = "*/=%$&@#";
-    public static int PartOne(string filename = "input.txt")
+    public static async Task<int> PartOne(string filename = "input.txt")
     {
-        return 0;
+        return await Task.FromResult(0);
     }
 }

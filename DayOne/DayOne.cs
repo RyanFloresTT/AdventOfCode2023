@@ -6,7 +6,7 @@ using System.IO;
 public static class DayOne
 {
 
-    static int PartOneHelper(string? line)
+    static Task<int> PartOneHelper(string? line)
     {
         var lineSum = 0;
 
@@ -27,14 +27,14 @@ public static class DayOne
         }
 
         Console.WriteLine($"Line Sum = {lineSum}");
-        return lineSum;
+        return Task.FromResult(lineSum);
     }
 
-    public static int PartOne(string filename = "input.txt")
+    public static async Task<int> PartOne(string filename = "input.txt")
     {
         var sum = 0;
 
-        LineUtils.ProcessFileLines("DayOne", filename, PartOneHelper, result => sum += result);        
+        await LineUtils.ProcessFileLinesAsync("DayOne", filename, PartOneHelper, async result => await Task.Run(() => sum += result));        
         
         return sum;
     }
@@ -54,7 +54,7 @@ public static class DayOne
         public int Position { get; set; }
     }
 
-    static int PartTwoHelper(string? line)
+    static Task<int> PartTwoHelper(string? line)
     {
         List<NumberWord> numberWords = new List<NumberWord>
         {
@@ -101,14 +101,14 @@ public static class DayOne
             lineTotal += lastNumberWord;
 
         }
-        return lineTotal;
+        return Task.FromResult(lineTotal);
     }
     
-    public static int PartTwo(string filename = "input.txt")
+    public static async Task<int> PartTwo(string filename = "input.txt")
     {
         var sum = 0;
     
-        LineUtils.ProcessFileLines("DayOne", filename, PartTwoHelper, result => sum += result);
+        await LineUtils.ProcessFileLinesAsync("DayOne", filename, PartTwoHelper, async result => await Task.Run(() => sum += result));
 
         return sum;
     }

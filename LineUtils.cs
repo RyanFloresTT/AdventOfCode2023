@@ -9,18 +9,18 @@ public static class LineUtils
     /// <param name="filename">The file's name.</param>
     /// <param name="processLine">The func to process each file line with.</param>
     /// <param name="handleResult">The action to handle the result of each processed line.</param>
-    public static void ProcessFileLines(string directoryName, string filename, Func<string?, int> processLine, Action<int> handleResult)
+    public static async Task ProcessFileLinesAsync(string directoryName, string filename, Func<string?, Task<int>> processLine, Func<int, Task> handleResult)
     {
         try
         {
             using StreamReader sr = new($"C:/Users/rryan/RiderProjects/AdventOfCode23/{directoryName}/{filename}");
-            var line = sr.ReadLine();
-        
+            var line = await sr.ReadLineAsync();
+
             while (line != null)
             {
-                var res = processLine(line);
-                handleResult(res);
-                line = sr.ReadLine();
+                var res = await processLine(line);
+                await handleResult(res);
+                line = await sr.ReadLineAsync();
             }
         }
         catch (Exception e)
