@@ -1,58 +1,44 @@
-﻿namespace AdventOfCode23.DayOne;
+﻿using AdventOfCode23.DayTwo;
+
+namespace AdventOfCode23.DayOne;
 using System.IO;
 
 public static class DayOne
 {
-    public static void PrintSolution()
+
+    static int PartOneHelper(string? line)
     {
-        // PartOne();
-        Console.WriteLine(PartTwo());
+        var lineSum = 0;
+
+        // Find the first numeric character from the left
+        for (var i = 0; i < line.Length; i++)
+        {
+            if (!char.IsDigit(line[i])) continue;
+            lineSum += int.Parse(line[i].ToString()) * 10;
+            break;
+        }
+
+        // Find the first numeric character from the right
+        for (var i = line.Length - 1; i >= 0; i--)
+        {
+            if (!char.IsDigit(line[i])) continue;
+            lineSum += int.Parse(line[i].ToString());
+            break;
+        }
+
+        Console.WriteLine($"Line Sum = {lineSum}");
+        return lineSum;
     }
 
-    static void PartOne()
+    public static int PartOne(string filename = "input.txt")
     {
         var sum = 0;
+
+        LineUtils.ProcessFileLines("DayOne", filename, PartOneHelper, result => sum += result);        
         
-        try
-        {
-            StreamReader sr = new("C:/Users/rryan/RiderProjects/AdventOfCode23/DayOne/input.txt");
-            var line = sr.ReadLine();
-            while (line != null)
-            {
-                var twoDigits = string.Empty;
-                
-                // start on left, stopping when a number is reached
-                for (var i = 0; i < line.Length; i++)
-                {
-                    if (!int.TryParse(line[i].ToString(), out _)) continue;
-                    twoDigits += line[i].ToString();
-                    break;
-                }
-
-                // start on right, stopping when a number is reached
-                for (var i = line.Length - 1; i >= 0; i--)
-                {
-                    if (!int.TryParse(line[i].ToString(), out _)) continue;
-                    twoDigits += line[i].ToString();
-                    break;
-                }
-                sum += int.Parse(twoDigits);
-                
-                line = sr.ReadLine();
-            }
-
-            sr.Close();
-            Console.ReadLine();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Exception: " + e.Message);
-        }
-        finally
-        {
-            Console.WriteLine($"Sum: {sum}");
-        }
+        return sum;
     }
+
 
     struct NumberWord
     {
@@ -67,11 +53,9 @@ public static class DayOne
         public int Number { get; set; }
         public int Position { get; set; }
     }
-    
-    public static int PartTwo(string filename = "input.txt")
+
+    static int PartTwoHelper(string? line)
     {
-        var sum = 0;
-    
         List<NumberWord> numberWords = new List<NumberWord>
         {
             new("one", 1, 0), 
@@ -85,53 +69,46 @@ public static class DayOne
             new("nine", 9, 0)
         };
     
-        try
+        var lineTotal = 0;
+
+        List<NumberWord> foundWords = new();
+            
+        foreach (var word in numberWords)
         {
-            using StreamReader sr = new($"C:/Users/rryan/RiderProjects/AdventOfCode23/DayOne/{filename}");
-            var line = sr.ReadLine();
-            while (line != null)
+            var startPos = 0;
+            while ((startPos = line.IndexOf(word.Word, startPos, StringComparison.OrdinalIgnoreCase)) != -1)
             {
-                var lineTotal = 0;
-
-                List<NumberWord> foundWords = new();
-            
-                foreach (var word in numberWords)
-                {
-                    var startPos = 0;
-                    while ((startPos = line.IndexOf(word.Word, startPos, StringComparison.OrdinalIgnoreCase)) != -1)
-                    {
-                        foundWords.Add(new(word.Word, word.Number, startPos));
-                        startPos += word.Word.Length;
-                    }
-                }
-
-                for (var i = 0; i < line.Length; i++)
-                {
-                    if (int.TryParse(line[i].ToString(), out var digit))
-                    {
-                        foundWords.Add(new("", digit, i));
-                    }
-                }
-            
-                if (foundWords.Count != 0)
-                {
-                    var ordered = foundWords.OrderBy(x => x.Position);
-                    var firstNumberWord = ordered.First().Number;
-                    var lastNumberWord = ordered.Last().Number;
-                
-                    lineTotal += firstNumberWord * 10;
-                    lineTotal += lastNumberWord;
-
-                    sum += lineTotal;
-                }
-            
-                line = sr.ReadLine();
+                foundWords.Add(new(word.Word, word.Number, startPos));
+                startPos += word.Word.Length;
             }
         }
-        catch (Exception e)
+
+        for (var i = 0; i < line.Length; i++)
         {
-            Console.WriteLine("Exception: " + e.Message);
+            if (int.TryParse(line[i].ToString(), out var digit))
+            {
+                foundWords.Add(new("", digit, i));
+            }
         }
+            
+        if (foundWords.Count != 0)
+        {
+            var ordered = foundWords.OrderBy(x => x.Position);
+            var firstNumberWord = ordered.First().Number;
+            var lastNumberWord = ordered.Last().Number;
+                
+            lineTotal += firstNumberWord * 10;
+            lineTotal += lastNumberWord;
+
+        }
+        return lineTotal;
+    }
+    
+    public static int PartTwo(string filename = "input.txt")
+    {
+        var sum = 0;
+    
+        LineUtils.ProcessFileLines("DayOne", filename, PartTwoHelper, result => sum += result);
 
         return sum;
     }
