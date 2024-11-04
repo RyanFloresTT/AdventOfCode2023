@@ -1,9 +1,6 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices.JavaScript;
+﻿namespace AdventOfCode23.Day2;
 
-namespace AdventOfCode23.DayTwo;
-
-public static class DayTwo
+public static class Day2
 {
     static Task<int> PartOneHelper(string? line)
     {
@@ -88,7 +85,7 @@ public static class DayTwo
     {
         var possibleGames = 0;
         
-        await LineUtils.ProcessFileLinesAsync("DayTwo", filename, PartOneHelper, async result => await Task.Run(() => possibleGames += result));
+        await LineUtils.ProcessFileLinesAsync("Day2", filename, PartOneHelper, async result => await Task.Run(() => possibleGames += result));
         
         return possibleGames;
     }
@@ -139,7 +136,7 @@ public static class DayTwo
     {
         var totalPower = 0;
         
-        await LineUtils.ProcessFileLinesAsync("DayTwo", filename, PartTwoHelper, async result => await Task.Run(() => totalPower += result));
+        await LineUtils.ProcessFileLinesAsync("Day2", filename, PartTwoHelper, async result => await Task.Run(() => totalPower += result));
 
         return totalPower;
     }

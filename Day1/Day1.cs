@@ -1,9 +1,6 @@
-﻿using AdventOfCode23.DayTwo;
+﻿namespace AdventOfCode23.Day1;
 
-namespace AdventOfCode23.DayOne;
-using System.IO;
-
-public static class DayOne
+public static class Day1
 {
 
     static Task<int> PartOneHelper(string? line)
@@ -34,7 +31,7 @@ public static class DayOne
     {
         var sum = 0;
 
-        await LineUtils.ProcessFileLinesAsync("DayOne", filename, PartOneHelper, async result => await Task.Run(() => sum += result));        
+        await LineUtils.ProcessFileLinesAsync("Day1", filename, PartOneHelper, async result => await Task.Run(() => sum += result));        
         
         return sum;
     }
@@ -108,7 +105,7 @@ public static class DayOne
     {
         var sum = 0;
     
-        await LineUtils.ProcessFileLinesAsync("DayOne", filename, PartTwoHelper, async result => await Task.Run(() => sum += result));
+        await LineUtils.ProcessFileLinesAsync("Day1", filename, PartTwoHelper, async result => await Task.Run(() => sum += result));
 
         return sum;
     }
