@@ -81,4 +81,71 @@ public static class Day3
 
         return lineTotal;
     }
+
+    struct LineWithDigit
+    {
+        public string? Line { get; set; }
+        public int Index { get; set; }
+    }
+    
+    public static async Task<int> PartTwo(string filename = "input.txt")
+    {
+        var lineTotal = 0;
+        string lastLine = null;
+        
+        try
+        {
+            using StreamReader sr = new StreamReader(filename);
+            var currentLine = await sr.ReadLineAsync();
+            var nextLine = await sr.ReadLineAsync();
+
+            while (currentLine != null)
+            {
+                // Process only if the current line contains '*'
+                if (currentLine.Contains('*') && IsAdjacentToTwoNumbers(currentLine, nextLine, lastLine, out var gearRatio))
+                {
+                    lineTotal += gearRatio;
+                }
+
+                // Move to the next set of lines
+                lastLine = currentLine;
+                currentLine = nextLine;
+                nextLine = await sr.ReadLineAsync();
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Exception: {e.Message}\n{e.Source}\n{e.StackTrace}");
+        }
+
+        return lineTotal;
+    }
+
+    private static bool IsAdjacentToTwoNumbers(string currentLine, string nextLine, string lastLine, out int gearRatio)
+    {
+        gearRatio = 0;
+        int starIndex = currentLine.IndexOf('*');
+
+        // Check if `*` is not found
+        if (starIndex == -1) return false;
+
+        // Helper function to safely gather numeric characters around a given index in a line
+        IEnumerable<char> GetAdjacentNumbers(string line, int index)
+        {
+            return line.Skip(Math.Max(0, index - 1)).Take(3).Where(char.IsDigit);
+        }
+
+        // Gather numbers from `lastLine`, `currentLine`, and `nextLine`
+        var adjacentNumbers = new List<int>();
+        adjacentNumbers.AddRange(GetAdjacentNumbers(lastLine ?? string.Empty, starIndex).Select(c => c - '0'));
+        adjacentNumbers.AddRange(GetAdjacentNumbers(currentLine, starIndex).Select(c => c - '0'));
+        adjacentNumbers.AddRange(GetAdjacentNumbers(nextLine ?? string.Empty, starIndex).Select(c => c - '0'));
+
+        // Filter for unique numbers and check if we have exactly two
+        var uniqueNumbers = adjacentNumbers.Distinct().ToList();
+        if (uniqueNumbers.Count != 2) return false;
+        gearRatio = uniqueNumbers.Sum();
+        return true;
+
+    }
 }

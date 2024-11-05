@@ -42,6 +42,12 @@ public class Tests
         Assert.That(res, Is.EqualTo(4361));
     }
     [Test]
+    public void Day3_Part2()
+    {
+        var res = Day3.PartTwo("example.txt").Result;
+        Assert.That(res, Is.EqualTo(467835));
+    }
+    [Test]
     public void Day4_Part1()
     {
         var res = Day4.PartOne("example.txt").Result;
