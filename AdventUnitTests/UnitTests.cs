@@ -8,55 +8,55 @@ namespace AdventUnitTests;
 public class Tests
 {
     [Test]
-    public void Day1_Part1()
+    public async Task Day1_Part1()
     {
-        var res = Day1.PartOne("part_one_example.txt").Result;
+        var res = await Day1.PartOne("part_one_example.txt");
         Assert.That(res, Is.EqualTo(142));
     }
 
     [Test]
-    public void Day1_Part2()
+    public async Task Day1_Part2()
     {
-        var res = Day1.PartTwo("part_two_example.txt").Result;
+        var res = await Day1.PartTwo("part_two_example.txt");
         Assert.That(res, Is.EqualTo(281));
     }
     
     [Test]
-    public void Day2_Part1()
+    public async Task Day2_Part1()
     {
-        var res = Day2.PartOne("example.txt").Result;
+        var res = await Day2.PartOne("example.txt");
         Assert.That(res, Is.EqualTo(8));
     }
     
     [Test]
-    public void Day2_Part2()
+    public async Task Day2_Part2()
     {
-        var res = Day2.PartTwo("example.txt").Result;
+        var res = await Day2.PartTwo("example.txt");
         Assert.That(res, Is.EqualTo(2286));
     }
     
     [Test]
-    public void Day3_Part1()
+    public async Task Day3_Part1()
     {
-        var res = Day3.PartOne("example.txt").Result;
+        var res = await Day3.PartOne("example.txt");
         Assert.That(res, Is.EqualTo(4361));
     }
     [Test]
-    public void Day3_Part2()
+    public async Task Day3_Part2()
     {
-        var res = Day3.PartTwo("example.txt").Result;
+        var res = await Day3.PartTwo("example.txt");
         Assert.That(res, Is.EqualTo(467835));
     }
     [Test]
-    public void Day4_Part1()
+    public async Task Day4_Part1()
     {
-        var res = Day4.PartOne("example.txt").Result;
+        var res = await Day4.PartOne("example.txt");
         Assert.That(res, Is.EqualTo(13));
     }
     [Test]
-    public void Day4_Part2()
+    public async Task Day4_Part2()
     {
-        var res = Day4.PartTwo("example.txt").Result;
-        Assert.That(res, Is.EqualTo(13));
+        var res = await Day4.PartTwo("example.txt");
+        Assert.That(res, Is.EqualTo(30));
     }
 }

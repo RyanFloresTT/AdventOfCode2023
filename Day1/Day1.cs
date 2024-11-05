@@ -1,5 +1,5 @@
 ﻿namespace AdventOfCode23.Day1;
-
+using Utils;
 public static class Day1
 {
 
@@ -23,7 +23,6 @@ public static class Day1
             break;
         }
 
-        Console.WriteLine($"Line Sum = {lineSum}");
         return Task.FromResult(lineSum);
     }
 

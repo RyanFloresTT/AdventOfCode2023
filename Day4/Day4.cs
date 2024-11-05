@@ -1,30 +1,31 @@
 ﻿namespace AdventOfCode23.Day4;
-
+using Utils;
 public static class Day4
 {
+    //                     Lottery               My Numbers
     // format : Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
     static Task<int> PartOneHelper(string? line)
     {
-        if (!CleanCardLine(line, out var lotteryNumbers, out var myNumbers)) return Task.FromResult(0);
-
+        if (!CleanCardLine(line, out var scoringNumberCount)) return Task.FromResult(0);
+        
         // calculate the cumulative score with doubling rule
-        var scoringNumbers = lotteryNumbers.Count(number => myNumbers.Contains(number));
         
-        if (scoringNumbers <= 0) return Task.FromResult(0);
+        if (scoringNumberCount <= 0) return Task.FromResult(0);
         
-        var score = Math.Pow(2, scoringNumbers - 1);
+        var score = Math.Pow(2, scoringNumberCount - 1);
 
         return Task.FromResult((int)score);
     }
 
-    private static bool CleanCardLine(string? line, out List<int> lotteryNumbers, out HashSet<int> myNumbers)
+    private static bool CleanCardLine(string? line, out int scoringNumberCount)
     {
-        myNumbers = new HashSet<int>();
-        lotteryNumbers = new List<int>();
+        var myNumbers = new HashSet<int>();
+        var lotteryNumbers = new List<int>();
+        scoringNumberCount = 0;
 
         if (string.IsNullOrWhiteSpace(line))
         {
-            return true;
+            return false;
         }
 
         var numbersSection = line[(line.IndexOf(':') + 1)..];
@@ -32,21 +33,25 @@ public static class Day4
 
         if (separatorIndex == -1)
         {
-            return true;
+            return false;
         }
-
+        
         // extract and parse lottery numbers
         var lotteryNumberStrings = numbersSection[..separatorIndex].Trim();
         lotteryNumbers = lotteryNumberStrings.Split(' ', StringSplitOptions.RemoveEmptyEntries)
             .Select(int.Parse)
             .ToList();
 
+        
         // extract and parse my numbers
         var myNumberStrings = numbersSection[(separatorIndex + 1)..].Trim();
         myNumbers = myNumberStrings.Split(' ', StringSplitOptions.RemoveEmptyEntries)
             .Select(int.Parse)
             .ToHashSet();
-        return false;
+        
+        scoringNumberCount = lotteryNumbers.Count(number => myNumbers.Contains(number));
+        
+        return true;
     }
 
 
@@ -60,41 +65,50 @@ public static class Day4
     }
 
     private static readonly LinkedList<int> Multipliers = [];
-
+ 
     static Task<int> PartTwoHelper(string? line)
     {
-        // add 1 to the multiplier LL for each line, this is because we are counting copies from previous wins PLUS original card
         if (Multipliers.First != null)
         {
             Multipliers.First.Value++;
         }
-        
-        // get count of winning numbers
-        if (!CleanCardLine(line, out var lotteryNumbers, out var myNumbers)) return Task.FromResult(0);
-        var winningNumberCount = lotteryNumbers.Count(number => myNumbers.Contains(number));
-        
-        // add 1 for x amount of winning numbers
-        var currentNode = Multipliers.First?.Next;
-        
-        for (var i = 0; i < winningNumberCount && currentNode != null; i++)
+        else
         {
-            currentNode.Value += 1;
-            currentNode = currentNode.Next;
+            Multipliers.AddFirst(1);
         }
-        
-        while (Multipliers.Count < winningNumberCount)
+    
+        if (!CleanCardLine(line, out var scoringNumberCount)) return Task.FromResult(0);
+    
+        var currentNode = Multipliers.First;
+        var currentMultiplier = currentNode.Value;
+        var nextNode = currentNode.Next;
+
+        if (nextNode == null)
         {
-            Multipliers.AddLast(1);
+            for (var i = 0; i < scoringNumberCount; i++)
+            {
+                Multipliers.AddLast(currentMultiplier);
+            }
         }
-        
-        // call PartOneHelper and multiply result by the first from the deque
-        var lineScore = PartOneHelper(line);
-        
-        var multiplier = Multipliers.First;
-        if (Multipliers.Count > 0) Multipliers.RemoveFirst();
-        
-        return multiplier != null ? Task.FromResult(lineScore.Result * multiplier.Value) : lineScore;
-    } 
+        else
+        {
+            for (var i = 0; i < scoringNumberCount; ++i)
+            {
+                if (nextNode != null)
+                {
+                    nextNode.Value += currentMultiplier;
+                    nextNode = nextNode.Next;
+                }
+                else
+                {
+                    Multipliers.AddLast(currentMultiplier);
+                }
+            }
+        }
+    
+        Multipliers.RemoveFirst();
+        return Task.FromResult(currentNode.Value);
+    }
 
     public static async Task<int> PartTwo(string filename = "input.txt")
     {

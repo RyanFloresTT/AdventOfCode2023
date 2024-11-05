@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode23;
+﻿namespace AdventOfCode23.Utils;
 
 public static class LineUtils
 {
@@ -11,9 +11,12 @@ public static class LineUtils
     /// <param name="handleResult">The action to handle the result of each processed line.</param>
     public static async Task ProcessFileLinesAsync(string directoryName, string filename, Func<string?, Task<int>> processLine, Func<int, Task> handleResult)
     {
+        var adventDirectoryName = "AdventOfCode2023";
+        var workingDirectory = System.IO.Directory.GetCurrentDirectory().Substring(0, System.IO.Directory.GetCurrentDirectory().LastIndexOf(adventDirectoryName) + adventDirectoryName.Length + 1);
+        workingDirectory = workingDirectory.Replace("\\", "/");
         try
         {
-            using StreamReader sr = new($"C:/Users/rryan/RiderProjects/AdventOfCode23/{directoryName}/{filename}");
+            using StreamReader sr = new($"{workingDirectory}{directoryName}/{filename}");
             var line = await sr.ReadLineAsync();
 
             while (line != null)
@@ -29,3 +32,5 @@ public static class LineUtils
         }
     }
 }
+
+// "C:\Users\rcflo\RiderProjects\AdventOfCode2023\Day1\part_one_example.txt"

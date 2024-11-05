@@ -1,5 +1,5 @@
 ﻿namespace AdventOfCode23.Day2;
-
+using Utils;
 public static class Day2
 {
     static Task<int> PartOneHelper(string? line)
@@ -94,7 +94,6 @@ public static class Day2
     {
         var firstColonIndex = line.IndexOf(':');
         line = line[(firstColonIndex + 2)..];
-        Console.WriteLine(line);
         ColorCounts powerCounts = new()
         {
             Red = new Color(){Name = "Red", Count = 0},

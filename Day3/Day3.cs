@@ -1,6 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using AdventOfCode23.Utils;
+using static AdventOfCode23.Utils.FilePathUtils;
 
 namespace AdventOfCode23.Day3;
 
@@ -34,7 +33,8 @@ public static class Day3
 
         try
         {
-            using StreamReader sr = new($"C:/Users/rryan/RiderProjects/AdventOfCode23/Day3/{filename}");
+
+            using StreamReader sr = new($"{GetWorkingDirectory()}Day3/{filename}");
             var currentLine = await sr.ReadLineAsync();
             var nextLine = await sr.ReadLineAsync();
 
@@ -95,7 +95,7 @@ public static class Day3
         
         try
         {
-            using StreamReader sr = new StreamReader(filename);
+            using var sr = new StreamReader($"{GetWorkingDirectory()}Day3/{filename}");
             var currentLine = await sr.ReadLineAsync();
             var nextLine = await sr.ReadLineAsync();
 
@@ -146,6 +146,5 @@ public static class Day3
         if (uniqueNumbers.Count != 2) return false;
         gearRatio = uniqueNumbers.Sum();
         return true;
-
     }
 }
