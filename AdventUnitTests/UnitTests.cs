@@ -53,4 +53,10 @@ public class Tests
         var res = Day4.PartOne("example.txt").Result;
         Assert.That(res, Is.EqualTo(13));
     }
+    [Test]
+    public void Day4_Part2()
+    {
+        var res = Day4.PartTwo("example.txt").Result;
+        Assert.That(res, Is.EqualTo(13));
+    }
 }
