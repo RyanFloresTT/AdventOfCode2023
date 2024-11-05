@@ -34,7 +34,7 @@ public static class Day3
 
         try
         {
-            using StreamReader sr = new($"C:/Users/rcflo/RiderProjects/AdventOfCode2023/Day3/{filename}");
+            using StreamReader sr = new($"C:/Users/rryan/RiderProjects/AdventOfCode23/Day3/{filename}");
             var currentLine = await sr.ReadLineAsync();
             var nextLine = await sr.ReadLineAsync();
 

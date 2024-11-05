@@ -13,7 +13,7 @@ public static class LineUtils
     {
         try
         {
-            using StreamReader sr = new($"C:/Users/rcflo/RiderProjects/AdventOfCode2023/{directoryName}/{filename}");
+            using StreamReader sr = new($"C:/Users/rryan/RiderProjects/AdventOfCode23/{directoryName}/{filename}");
             var line = await sr.ReadLineAsync();
 
             while (line != null)

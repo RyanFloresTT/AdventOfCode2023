@@ -6,7 +6,7 @@ public static class Day3Utils
     {
         var symbols = string.Empty;
         // Read the entire file content
-        const string filePath = "C:/Users/rcflo/RiderProjects/AdventOfCode2023/Day3/input.txt";
+        const string filePath = "C:/Users/rryan/RiderProjects/AdventOfCode23/Day3/input.txt";
         var content = File.ReadAllText(filePath);
 
         // Remove all digits and periods
