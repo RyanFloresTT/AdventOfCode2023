@@ -69,22 +69,6 @@ public static class Day6
             var nonGames = 0;
             var underThreshold = (float)game.RecordDistance / game.RaceTimeInMs;
 
-            /*// find min number of seconds needed at first
-            
-            for (var i = 0; i < game.RaceTimeInMs; i++)
-            {
-                if (i > underThreshold) break;
-                nonGames++;
-            }
-            
-            // two for loops to break out of them at different times
-            for (var i = 0; i < game.RaceTimeInMs; i++)
-            {
-                var timeHeld = game.RaceTimeInMs - i;
-
-                if (timeHeld * i > game.RecordDistance) break;
-                nonGames++;
-            }*/
             var potenialGames = new List<int>();
             for (var i = 0; i < game.RaceTimeInMs; i++)
             {
