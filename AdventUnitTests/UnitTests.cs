@@ -4,6 +4,7 @@ using AdventOfCode23.Day3;
 using AdventOfCode23.Day4;
 using AdventOfCode23.Day5;
 using AdventOfCode23.Day6;
+using AdventOfCode23.Day7;
 
 namespace AdventUnitTests;
 
@@ -85,5 +86,18 @@ public class Tests
     {
         var res = await Day6.PartTwo("example.txt");
         Assert.That(res, Is.EqualTo(71503));
+    }
+    [Test]
+    public async Task Day7_Part1()
+    {
+        var res = await Day7.PartOne("example.txt");
+        Assert.That(res, Is.EqualTo(6440));
+    }
+    [Test]
+    public async Task Day7_Part2()
+    {
+        var res = await Day7.PartTwo("example.txt");
+        Console.WriteLine(res);
+        Assert.That(res, Is.EqualTo(5905));
     }
 }

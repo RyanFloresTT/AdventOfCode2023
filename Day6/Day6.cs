@@ -1,5 +1,6 @@
 ﻿namespace AdventOfCode23.Day6;
 using static Utils.FilePathUtils;
+
 public static class Day6
 {
     public static async Task<int> PartOne(string filename = "input.txt")
