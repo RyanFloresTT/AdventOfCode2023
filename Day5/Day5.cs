@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices.ComTypes;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace AdventOfCode23.Day5;
 using static Utils.FilePathUtils;
@@ -35,7 +36,7 @@ public static class Day5
             }*/
             
             // Process each map and compute results as needed
-            return seeds.Select(seed => maps.Convert(seed)).Prepend(location).Min();
+            return seeds.Select(seed => maps.ConvertAll(seed)).Prepend(location).Min();
         }
         catch (Exception e)
         {
@@ -45,7 +46,7 @@ public static class Day5
         return location;
     }
     
-    public static async Task<long> PartTwo(string filename = "input.txt")
+    public static async Task<long> PartTwo(string filename = "example.txt")
     {        
         List<long> seeds = [];
         var location = long.MaxValue;
@@ -54,7 +55,7 @@ public static class Day5
         try
         {
             using StreamReader sr = new($"{GetWorkingDirectory()}Day5/{filename}");
-            string? line = await sr.ReadLineAsync();
+            var line = await sr.ReadLineAsync();
 
             if (line != null)
             {
@@ -79,34 +80,23 @@ public static class Day5
                 }
             }*/
 
-            var locationTasks = GenerateSeedRanges(seeds)
-                .AsParallel()
-                .Select(async seedRange => await Task.Run(() => {
-                        var minLocation = long.MaxValue;
 
-                        for (long i = seedRange.Start; i < seedRange.Start + seedRange.Length; i++)
-                        {
-                            // Calculate converted value for each map sequence
-                            var convertedValue = maps.Convert(i);
-
-                            // Update minLocation directly if the value is lower
-                            if (convertedValue < minLocation)
-                            {
-                                minLocation = convertedValue;
-                            }
-                        }
-
-                        return minLocation;
-                    })
-            );
+            foreach (var seedRange in GenerateSeedRanges(seeds))
+            {
+                for (var seed = seedRange.Start; seed < seedRange.Start + seedRange.Length; seed++)
+                {
+                    // somehow say "oh... this seed will lead to a higher value, exit out of this loop"
+                    var res = maps.ConvertAll(seed);
+                    location = res < location ? res : location;
+                }
+            }
             
             /*soil-to-fertilizer map:
             0 15 37
             37 52 2
             39 0 15*/
             
-            var results = await Task.WhenAll(locationTasks);
-            location = results.Min();
+            
             // Process each map and compute results as needed
             return location;
         }
@@ -200,15 +190,6 @@ class GardenMap
 
 static class MapHelper
 {
-    public static long Convert(this List<GardenMap> maps, long input)
-    {
-        var result = input;
-        
-        foreach (var map in maps)
-        {
-            result = map.Convert(result);
-        }
-
-        return result;
-    } 
+    public static long ConvertAll(this List<GardenMap> maps, long input) =>
+        maps.Aggregate(input, (current, map) => map.Convert(current));
 }
