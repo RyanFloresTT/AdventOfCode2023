@@ -3,13 +3,14 @@ using static Utils.FilePathUtils;
 public static class LineUtils
 {
     /// <summary>
-    /// Performs a given func onto each line in a given file and directory name.
+    /// Processes each line in a given file, applying a generic function to each line and handling the result.
     /// </summary>
+    /// <typeparam name="T">The type of the result after processing each line.</typeparam>
     /// <param name="directoryName">The directory for the input file.</param>
     /// <param name="filename">The file's name.</param>
-    /// <param name="processLine">The func to process each file line with.</param>
-    /// <param name="handleResult">The action to handle the result of each processed line.</param>
-    public static async Task ProcessFileLinesAsync(string directoryName, string filename, Func<string?, Task<int>> processLine, Func<int, Task> handleResult)
+    /// <param name="processLine">The function to process each file line with.</param>
+    /// <param name="handleResult">The function to handle the result of each processed line.</param>
+    public static async Task ProcessFileLinesAsync<T>(string directoryName, string filename, Func<string?, Task<T>> processLine, Func<T, Task> handleResult)
     {
         try
         {
